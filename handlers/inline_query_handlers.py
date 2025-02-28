@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from utils import inlinequery
+from utils import inline_query_responses
 from forecalib import foreca
 
 async def handle_inline_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -10,24 +10,24 @@ async def handle_inline_query(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     if query == "":
         # Default results when no query is provided
-        results.append(inlinequery.empty_query_response)
+        results.append(inline_query_responses.empty_query_response)
     
     elif query.lower() == "help":
         # Help message
-        results.append(inlinequery.help_query_response)
+        results.append(inline_query_responses.help_query_response)
     
     else:
         try:
             locations = foreca.find_location(query)
         except:
-            results.append(inlinequery.notfound_query_response)
+            results.append(inline_query_responses.notfound_query_response)
         else:
             for loc in locations:
                 # Store location object in bot_data with a unique key
                 storage_key = f"location_{loc.id}"
                 context.bot_data[storage_key] = loc
 
-                loc_result = inlinequery.location_response(loc)
+                loc_result = inline_query_responses.location_response(loc)
                 results.append(loc_result)
 
 

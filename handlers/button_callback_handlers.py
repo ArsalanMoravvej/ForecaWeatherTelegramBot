@@ -1,11 +1,9 @@
 from telegram import (
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
     Update,
 )
 from telegram.ext import ContextTypes
-from forecalib import foreca, models
-from utils import buttoncallback
+from forecalib import models
+from utils import button_callback_responses
 
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -27,12 +25,12 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         if action == "daily":
 
-            message, reply_markup = buttoncallback.daily_weather_response(location)
+            message, reply_markup = button_callback_responses.daily_weather_response(location)
 
 
         elif action == "hourly":
 
-            message, reply_markup = buttoncallback.hourly_weather_response(location)
+            message, reply_markup = button_callback_responses.hourly_weather_response(location)
 
         await query.edit_message_text(
             text=message,
