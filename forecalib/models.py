@@ -3,6 +3,40 @@ from typing import Optional
 from datetime import datetime, time, date as dateclass
 
 
+class WindDirections:
+    directions = {
+        "N": "⬇️",
+        "NE": "↙️",
+        "E": "⬅️",
+        "SE": "↖️",
+        "S": "⬆️",
+        "SW": "↗️",
+        "W": "➡️",
+        "NW": "↘️"
+    }
+
+    @classmethod
+    def get_direction(cls, key: str) -> str:
+        return cls.directions.get(key, "Unknown direction")
+
+
+class MoonPhases:
+    phases = {
+        "newMoon": "🌑",
+        "waxingCrescentMoon": "🌒",
+        "firstQuarterMoon": "🌓",
+        "waxingGibbousMoon": "🌔",
+        "fullMoon": "🌕",
+        "waningGibbousMoon": "🌖",
+        "lastQuarterMoon": "🌗",
+        "waningCrescentMoon": "🌘"
+    }
+
+    @classmethod
+    def get_phase(cls, key: str) -> str:
+        return cls.phases.get(key, "Unknown phase")
+
+
 class Location(BaseModel):
     id: str
     name: str
