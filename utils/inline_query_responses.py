@@ -1,4 +1,8 @@
-from telegram import InlineQueryResultArticle, InlineKeyboardMarkup, InlineKeyboardButton, InputTextMessageContent, Update
+from telegram import (InlineQueryResultArticle,
+                      InlineKeyboardMarkup,
+                      InlineKeyboardButton,
+                      InputTextMessageContent)
+
 from forecalib import models
 
 empty_query_response = InlineQueryResultArticle(

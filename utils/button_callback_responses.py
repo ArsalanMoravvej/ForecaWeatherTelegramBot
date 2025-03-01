@@ -35,14 +35,17 @@ def hourly_weather_response(location: models.Location):
     # Get hourly forecast using the location object
     forecast = foreca.fetch_hourly_weather(location)
     # Format the forecast data
-    message = f"Hourly Forecast for {location.name} - {forecast[0].timestamp}:\n"
+    message  = f"<b>📍 {location.name} Hourly Forecast</b>\n"
+    message += f"<b>📅 {forecast[0].timestamp.date().strftime("%A")}</b>"
+    message += f"{forecast[0].timestamp.date().strftime("%B")} -"
+    message += f" {forecast[0].timestamp.day}"
     for hour in forecast:
-        message += "----"
+        message += "\n__________________________________________"
         message += f"\n<b>Time:</b> {hour.time_24_hour}\n"
         message += f"\n<b>Temperature:</b> {hour.temperature_celsius}\n"
         message += f"<b>Feels Like:</b> {hour.feels_like_celsius}\n"
                 
-        keyboard = [
+    keyboard = [
         [
             InlineKeyboardButton("Daily Forecast", callback_data=f"daily_{location.id}")                    
         ],

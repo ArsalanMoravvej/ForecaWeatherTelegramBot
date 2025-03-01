@@ -7,7 +7,7 @@ from watchdog.events import FileSystemEventHandler
 BOT_SCRIPT = "main.py"  # Your main bot script
 WATCH_DIR = "."  # Watch the entire project folder
 IGNORE_DIRS = {".git", "__pycache__"}  # Directories to ignore
-IGNORE_EXTENSIONS = {".swp", ".tmp", ".pyc"}  # File extensions to ignore
+IGNORE_EXTENSIONS = {".swp", ".tmp", ".pyc", ".ipynb"}  # File extensions to ignore
 
 class RestartHandler(FileSystemEventHandler):
     def __init__(self, process_starter):
