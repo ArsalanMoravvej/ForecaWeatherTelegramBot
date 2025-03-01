@@ -10,8 +10,8 @@ class Location(BaseModel):
     countryId: str
     timezone: str
     population: Optional[int]
-    lon: str
-    lat: str
+    lon: float
+    lat: float
 
     @field_validator("lon", "lat", mode="before")
     def convert_to_string(cls, value):
@@ -87,9 +87,9 @@ class HourlyWeather(BaseModel):
     uv_index: float = Field(alias="uvi")
     
     # 3. Temperature Details
-    temperature_celsius: float = Field(alias="temp")
-    feels_like_celsius: float = Field(alias="flike")
-    dew_point_celsius: float = Field(alias="dewp")
+    temperature_celsius: int = Field(alias="temp")
+    feels_like_celsius: int = Field(alias="flike")
+    dew_point_celsius: int = Field(alias="dewp")
 
     temperature_fahrenheit: float = Field(alias="tempf")
     feels_like_fahrenheit: float = Field(alias="flikef")
@@ -99,12 +99,12 @@ class HourlyWeather(BaseModel):
     wind_direction_degrees: float = Field(alias="windd")
     wind_direction_cardinal: str = Field(alias="windCardinal")
 
-    wind_speed_kmh: float = Field(alias="windskmh")
-    wind_speed_mph: float = Field(alias="windsmph")
+    wind_speed_kmh: int = Field(alias="windskmh")
+    wind_speed_mph: int = Field(alias="windsmph")
     wind_speed_beaufort: float = Field(alias="windsbft")
 
-    max_wind_speed_kmh: float = Field(alias="maxwindkmh")
-    max_wind_speed_mph: float = Field(alias="maxwindmph")
+    max_wind_speed_kmh: int = Field(alias="maxwindkmh")
+    max_wind_speed_mph: int = Field(alias="maxwindmph")
     max_wind_beaufort: float = Field(alias="maxwindbft")
     
     # 5. Rainfall and Snowfall
@@ -121,7 +121,7 @@ class HourlyWeather(BaseModel):
 
     
     # 6. Atmospheric and Visibility Data
-    relative_humidity_percent: float = Field(alias="rhum")
+    relative_humidity_percent: int = Field(alias="rhum")
     pressure_hpa: float = Field(alias="pres")
     pressure_inhg: float = Field(alias="presinhg")
     pressure_mmhg: float = Field(alias="presmmhg")

@@ -29,21 +29,26 @@ def daily_weather_response(location: models.Location):
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     return message, reply_markup
-
+ 
 def hourly_weather_response(location: models.Location):
 
     # Get hourly forecast using the location object
     forecast = foreca.fetch_hourly_weather(location)
     # Format the forecast data
-    message  = f"<b>📍 {location.name} Hourly Forecast</b>\n"
-    message += f"<b>📅 {forecast[0].timestamp.date().strftime("%A")}</b>"
-    message += f"{forecast[0].timestamp.date().strftime("%B")} -"
-    message += f" {forecast[0].timestamp.day}"
+    message  = f"<b>📍 - {location.name} Hourly Forecast</b>\n"
+    message += f"<b>📅 - {forecast[0].timestamp.date().strftime("%A")}</b> - "
+    message += f"{forecast[0].timestamp.date().strftime("%B")}"
+    message += f" {forecast[0].timestamp.day}\n"
     for hour in forecast:
-        message += "\n__________________________________________"
-        message += f"\n<b>Time:</b> {hour.time_24_hour}\n"
-        message += f"\n<b>Temperature:</b> {hour.temperature_celsius}\n"
-        message += f"<b>Feels Like:</b> {hour.feels_like_celsius}\n"
+        message += f"_________________\n"
+        message += f"\n<b>⏰ Time:</b> {hour.time_24_hour}:00\n\n"
+        message += f"<b>⛅️ Weather:</b> {hour.weather_description}\n"
+        message += f"<b>🌡 Temperature:</b> {hour.temperature_celsius} °C\n"
+        message += f"<b>👤 Feels Like:</b> {hour.feels_like_celsius} °C\n"
+        message += f"<b>💧 Rel. Humidity:</b> {hour.relative_humidity_percent} %\n"
+        message += f"<b>🌬 Wind:</b> {hour.wind_speed_kmh} KM/H\n"
+        message += f"<b>🕶 UV Index:</b> {hour.uv_index}\n"
+        message += f"<b>🍃 Air Quality:</b> {hour.air_quality_index}\n"
                 
     keyboard = [
         [
