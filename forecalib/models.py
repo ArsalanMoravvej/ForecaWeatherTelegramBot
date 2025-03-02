@@ -2,6 +2,77 @@ from pydantic import BaseModel, field_validator, Field
 from typing import Optional
 from datetime import datetime, time, date as dateclass
 
+weather_code_emojis = {
+    # Daytime Weather Codes
+    "d000": "☀️",
+    "d100": "🌤️",
+    "d200": "⛅",
+    "d210": "⛅🌧️",
+    "d211": "⛅🌨️",
+    "d212": "⛅❄️",
+    "d220": "⛅🌦️",
+    "d221": "⛅🌨️",
+    "d222": "⛅❄️",
+    "d240": "⛅⚡🌧️",
+    "d300": "🌥️",
+    "d310": "🌥️🌧️",
+    "d311": "🌥️🌨️",
+    "d312": "🌥️❄️",
+    "d320": "🌥️🌦️",
+    "d321": "🌥️🌨️",
+    "d322": "🌥️❄️",
+    "d340": "🌥️⚡🌧️",
+    "d400": "☁️",
+    "d410": "☁️🌧️",
+    "d411": "☁️🌨️",
+    "d412": "☁️❄️",
+    "d420": "☁️🌦️",
+    "d421": "☁️🌨️",
+    "d422": "☁️❄️",
+    "d430": "☁️🌧️",
+    "d431": "☁️🌨️",
+    "d432": "☁️❄️",
+    "d440": "☁️⚡🌧️",
+    "d500": "🌤️",
+    "d600": "🌫️",
+
+    # Nighttime Weather Codes
+    "n000": "🌙",
+    "n100": "🌙☁️",
+    "n200": "🌙☁️",
+    "n210": "🌙☁️🌧️",
+    "n211": "🌙☁️🌨️",
+    "n212": "🌙☁️❄️",
+    "n220": "🌙☁️🌦️",
+    "n221": "🌙☁️🌨️",
+    "n222": "🌙☁️❄️",
+    "n240": "🌙☁️⚡🌧️",
+    "n300": "🌙☁️",
+    "n310": "🌙☁️🌧️",
+    "n311": "🌙☁️🌨️",
+    "n312": "🌙☁️❄️",
+    "n320": "🌙☁️🌦️",
+    "n321": "🌙☁️🌨️",
+    "n322": "🌙☁️❄️",
+    "n340": "🌙☁️⚡🌧️",
+    "n400": "🌙☁️",
+    "n410": "🌙☁️🌧️",
+    "n411": "🌙☁️🌨️",
+    "n412": "🌙☁️❄️",
+    "n420": "🌙☁️🌦️",
+    "n421": "🌙☁️🌨️",
+    "n422": "🌙☁️❄️",
+    "n430": "🌙☁️🌧️",
+    "n431": "🌙☁️🌨️",
+    "n432": "🌙☁️❄️",
+    "n440": "🌙☁️⚡🌧️",
+    "n500": "🌙☁️",
+    "n600": "🌙🌫️"
+}
+
+def get_weather_emoji(code):
+    return weather_code_emojis.get(code, "❓")  # Default to unknown emoji
+
 
 class WindDirections:
     directions = {
@@ -35,6 +106,39 @@ class MoonPhases:
     @classmethod
     def get_phase(cls, key: str) -> str:
         return cls.phases.get(key, "Unknown phase")
+
+
+class HourEmojis:
+    emojis = {
+        "12 AM": "🕛",
+        "1 AM": "🕐",
+        "2 AM": "🕑",
+        "3 AM": "🕒",
+        "4 AM": "🕓",
+        "5 AM": "🕔",
+        "6 AM": "🕕",
+        "7 AM": "🕖",
+        "8 AM": "🕗",
+        "9 AM": "🕘",
+        "10 AM": "🕙",
+        "11 AM": "🕚",
+        "12 PM": "🕛",
+        "1 PM": "🕐",
+        "2 PM": "🕑",
+        "3 PM": "🕒",
+        "4 PM": "🕓",
+        "5 PM": "🕔",
+        "6 PM": "🕕",
+        "7 PM": "🕖",
+        "8 PM": "🕗",
+        "9 PM": "🕘",
+        "10 PM": "🕙",
+        "11 PM": "🕚"
+    }
+
+    @classmethod
+    def get_emoji(cls, key: str) -> str:
+        return cls.emojis.get(key, "Unknown time")
 
 
 class Location(BaseModel):
@@ -117,8 +221,8 @@ class HourlyWeather(BaseModel):
     weather_symbol: str = Field(alias="symb")
     weather_description: str = Field(alias="wx")
     weather_class: str = Field(alias="weatherClass")
-    air_quality_index: float = Field(alias="aqi")
-    uv_index: float = Field(alias="uvi")
+    air_quality_index: int = Field(alias="aqi")
+    uv_index: int = Field(alias="uvi")
     
     # 3. Temperature Details
     temperature_celsius: int = Field(alias="temp")
@@ -150,8 +254,8 @@ class HourlyWeather(BaseModel):
     rainfall_long_inches: float = Field(alias="rainlin")
     snowfall_inches: float = Field(alias="snowffin")
 
-    rain_probability_percent: float = Field(alias="rainp")
-    snow_probability_percent: float = Field(alias="snowp")
+    rain_probability_percent: int = Field(alias="rainp")
+    snow_probability_percent: int = Field(alias="snowp")
 
     
     # 6. Atmospheric and Visibility Data

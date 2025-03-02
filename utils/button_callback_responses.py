@@ -8,13 +8,13 @@ def daily_weather_response(location: models.Location):
     # Get daily forecast using the location object
     forecast = foreca.fetch_daily_weather(location)
     # Format the forecast data
-    message = f"Daily Forecast for <b>{location.name}</b>\n"
+    message = f"Daily Forecast for {location.name}\n"
     for day in forecast:
         message += "\n----"
-        message += f"\n<b>{day.date.strftime("%A")}:</b> {day.date}\n"
-        message += f"\n<b>Max Temperature:</b> {day.max_temperature_celsius}\n"
-        message += f"<b>Min Temperature:</b> {day.min_temperature_celsius}\n"
-        message += f"<b>Precipitation:</b> {day.rainfall_mm}mm  ({day.rain_probability_percent}%)\n"
+        message += f"\n{day.date.strftime("%A")}: {day.date}\n"
+        message += f"\nMax Temperature: {day.max_temperature_celsius}\n"
+        message += f"Min Temperature: {day.min_temperature_celsius}\n"
+        message += f"Precipitation: {day.rainfall_mm}mm  ({day.rain_probability_percent}%)\n"
     keyboard = [
         [
             InlineKeyboardButton("Hourly Forecast", callback_data=f"hourly_{location.id}")                    
@@ -35,21 +35,35 @@ def hourly_weather_response(location: models.Location):
     # Get hourly forecast using the location object
     forecast = foreca.fetch_hourly_weather(location)
     # Format the forecast data
-    message  = f"<b>📍 - {location.name} Hourly Forecast</b>\n"
-    message += f"<b>📅 - {forecast[0].timestamp.date().strftime("%A")}</b> - "
-    message += f"{forecast[0].timestamp.date().strftime("%B")}"
-    message += f" {forecast[0].timestamp.day}\n"
+    message = "<b>"
+    message += f"📍 - {location.name} Hourly Forecast\n"
+    message += (
+        f"📅 - {forecast[0].timestamp.date().strftime("%A")} - "
+        f"{forecast[0].timestamp.date().strftime("%B")} "
+        f"{forecast[0].timestamp.day}\n"
+        )
     for hour in forecast:
-        message += f"\n\n"
-        message += f"<b>⏰:</b> {hour.time_12_hour}\n\n"
-        message += f"<b>⛅️ Desc:</b> {hour.weather_description}\n"
-        message += f"<b>🌡 Temp:</b> {hour.temperature_celsius} °C\n"
-        message += f"<b>👤 F.Like:</b> {hour.feels_like_celsius} °C\n"
-        message += f"<b>💧 Rel. Hum:</b> {hour.relative_humidity_percent} %\n"
-        message += f"<b>🌬 Wind:</b> {hour.wind_speed_kmh} KM/H in {models.WindDirections.get_direction(hour.wind_direction_cardinal)}\n"
-        message += f"<b>🕶 UV Index:</b> {hour.uv_index}\n"
-        message += f"<b>🍃 Air Quality:</b> {hour.air_quality_index}\n"
+        message += f"\n"
+        message += f"{models.HourEmojis.get_emoji(hour.time_12_hour)} {hour.time_12_hour}\n"
+        message += f"🔹 {hour.weather_description} {models.get_weather_emoji(hour.weather_symbol)}\n"
+        message += f"🌡 Temp: {hour.temperature_celsius} °C\n"
+        message += f"👤 F.Like: {hour.feels_like_celsius} °C\n"
+        message += f"💧 Rel. Hum: {hour.relative_humidity_percent} %\n"
+        
+        if hour.rainfall_mm >= 0.1:
+            message += f"🌧 Rainfall: {round(hour.rainfall_mm,1)} mm\n"
+        
+        if hour.snowfall_mm >= 0.1:
+            message += f"❄️ Snowfall: {round(hour.snowfall_mm,1)} mm\n"
+
+        message += f"🌬 Wind: {hour.wind_speed_kmh} KM/H in {models.WindDirections.get_direction(hour.wind_direction_cardinal)}\n"
+
+        if hour.uv_index > 0:
+            message += f"🕶 UV Index: {hour.uv_index}\n"
+        
+        message += f"🍃 Air Quality: {hour.air_quality_index}\n"
     
+    message += "</b>"
                 
     keyboard = [
         [
