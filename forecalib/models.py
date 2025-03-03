@@ -89,18 +89,67 @@ class WindDirections:
     @classmethod
     def get_direction(cls, key: str) -> str:
         return cls.directions.get(key, "Unknown direction")
+        
+    @classmethod
+    def degrees_to_cardinal(cls, degrees: float) -> str:
+        """
+        Convert wind direction in degrees to cardinal direction (N, NE, E, etc.)
+        
+        Args:
+            degrees: Wind direction in degrees (0-360, where 0/360 is North)
+            
+        Returns:
+            Cardinal direction as a string
+        """
+        # Normalize degrees to 0-360 range
+        degrees = degrees % 360
+        
+        # Define direction ranges
+        if 337.5 <= degrees or degrees < 22.5:
+            return "N"
+        elif 22.5 <= degrees < 67.5:
+            return "NE"
+        elif 67.5 <= degrees < 112.5:
+            return "E"
+        elif 112.5 <= degrees < 157.5:
+            return "SE"
+        elif 157.5 <= degrees < 202.5:
+            return "S"
+        elif 202.5 <= degrees < 247.5:
+            return "SW"
+        elif 247.5 <= degrees < 292.5:
+            return "W"
+        elif 292.5 <= degrees < 337.5:
+            return "NW"
+        
+        # This should never happen with the above logic, but as a fallback
+        return "Unknown"
+        
+    @classmethod
+    def get_direction_from_degrees(cls, degrees: float) -> str:
+        """
+        Get the directional emoji based on wind direction in degrees
+        
+        Args:
+            degrees: Wind direction in degrees (0-360)
+            
+        Returns:
+            Direction emoji
+        """
+        cardinal = cls.degrees_to_cardinal(degrees)
+        return cls.get_direction(cardinal)
 
 
 class MoonPhases:
     phases = {
-        "newMoon": "🌑",
-        "waxingCrescentMoon": "🌒",
-        "firstQuarterMoon": "🌓",
-        "waxingGibbousMoon": "🌔",
-        "fullMoon": "🌕",
-        "waningGibbousMoon": "🌖",
-        "lastQuarterMoon": "🌗",
-        "waningCrescentMoon": "🌘"
+        "newMoon": "New Moon 🌑",
+        "waxingCrescentMoon": "Waxing Crescent 🌒",
+        "firstQuarterMoon": "First Quarter 🌓",
+        "waxingGibbousMoon": "Waxing Gibbous 🌔",
+        "fullMoon": "Full Moon 🌕",
+        "waningGibbousMoon": "Waning Gibbous 🌖",
+        "lastQuarterMoon": "Last Quarter 🌗",
+        "waningCrescentMoon": "Waning Crescent 🌘"
     }
 
     @classmethod
@@ -166,25 +215,25 @@ class DailyWeather(BaseModel):
     
     # 2. Weather Conditions
     weather_symbol: str = Field(alias="symb")
-    min_temperature_celsius: float = Field(alias="tmin")
-    max_temperature_celsius: float = Field(alias="tmax")
-    relative_humidity_percent: float = Field(alias="rhum")
+    min_temperature_celsius: int = Field(alias="tmin")
+    max_temperature_celsius: int = Field(alias="tmax")
+    relative_humidity_percent: int = Field(alias="rhum")
     uv_index: float = Field(alias="uvi")
 
     # 3. Rain and Snow Data
     rainfall_mm: float = Field(alias="rain")
-    rain_probability_percent: float = Field(alias="rainp")
-    snow_probability_percent: float = Field(alias="snowp")
+    rain_probability_percent: int = Field(alias="rainp")
+    snow_probability_percent: int = Field(alias="snowp")
     snowfall_mm: float = Field(alias="snowff")
     
     # 4. Wind Details
     wind_direction_degrees: float = Field(alias="windd")
-    wind_speed_kmh: float = Field(alias="winds")
+    wind_speed_kmh: int = Field(alias="winds")
     
     # 5. Sun and Moon Details
     sunrise_time: time = Field(alias="sunrise")
     sunset_time: time = Field(alias="sunset")
-    day_length_seconds: int = Field(alias="daylen")
+    day_length_minutes: int = Field(alias="daylen")
     
     moonrise_time: Optional[time] = Field(alias="moonrise")
     moonset_time: Optional[time] = Field(alias="moonset")

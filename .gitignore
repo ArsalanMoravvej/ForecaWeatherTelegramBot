@@ -2,3 +2,4 @@ __pycache__
 devNoteBook.ipynb
 .env
 venv
+telegram-bot.service
